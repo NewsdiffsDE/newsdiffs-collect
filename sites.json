@@ -1,0 +1,16 @@
+[
+	{
+		"id": "zeit",
+		"url": "https://www.zeit.de/index",
+		"label_pretty": "ZEIT Online",
+		"selector_for_teaser": "article[class^=\"teaser\"]",
+		"selector_for_title": "a[href^=\"https://www.zeit.de/\"]"
+	},
+	{
+		"id": "spiegel",
+		"url": "https://www.spiegel.de",
+		"label_pretty": "Der SPIEGEL",
+		"selector_for_teaser": "div[class^=\"teaser\"]",
+		"selector_for_title": ".article-title a"
+	}
+]
