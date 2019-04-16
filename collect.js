@@ -3,12 +3,15 @@ const request = require('request')
 const cheerio = require('cheerio')
 
 const SITES = JSON.parse(fs.readFileSync('./sites.json'), 'utf8')
+const RUNTIME = new Date().getTime()
 
-storeTeaser = (link, title, SITE) => {
+let countNewTeasers = 0
+let countUnchangedTeasers = 0
+let countChangedTeasers = 0
+
+storeTeaser = (link, title, SITE, STORAGE) => {
     
-    console.log(`store '${title}' for '${SITE.label_pretty}' ('${link}')`);
-    /*
-    let STORAGE = 
+    // console.log(`store '${title}' for '${SITE.label_pretty}' ('${link}')`);
 
     if (!STORAGE[link]) {
         STORAGE[link] = { 
@@ -22,22 +25,30 @@ storeTeaser = (link, title, SITE) => {
             STORAGE[link]['last_seen'] = RUNTIME
             countUnchangedTeasers++
         } else {
+            const lastTitle = STORAGE[link]['title'][STORAGE[link]['title'].length-1]
             console.log('title changed!!!!!!!!')
-            console.log(`- OLD: '${STORAGE[link]['title'][STORAGE[link]['title'].length-1]}'`)
+            console.log(`- OLD: '${lastTitle}'`)
             console.log(`+ NEW: '${title}'`)
             STORAGE[link]['title'].push(title)
             STORAGE[link]['last_seen'] = RUNTIME
+
+            // const htmlOfDiff = simplediff.htmlDiff(lastTitle, title)
+            // let diffieBody = fs.readFileSync('./diffie.html').toString()
+            // const htmlOfDiff = `<small>Geänderte Headline bei ZEIT Online: ${link}</small><p><script>document.write(htmlDiff('${lastTitle}', '${title}'))</script></p><hr>`
+            // diffieBody = diffieBody.replace('<!-- PLACEHOLDER_FOR_NEW -->', '<!-- PLACEHOLDER_FOR_NEW -->\n\n' + htmlOfDiff)
+            // fs.writeFileSync('./diffie.html', diffieBody)
+
             countChangedTeasers++
         }        
     }
-    */
+
 }
 
-handleTeaser = ($teaser, SITE) => {
+handleTeaser = ($teaser, SITE, STORAGE) => {
     const link = cheerio(SITE.selector_for_title, $teaser)
 
     if (link.length > 0) {
-        storeTeaser(link[0].attribs['href'], link[0].attribs['title'], SITE)
+        storeTeaser(link[0].attribs['href'], link[0].attribs['title'], SITE, STORAGE)
     }
 
     // TODO: vllt muss jede Zeitung eine eigene Klasse sein, die von BaseNewspaper erbt und solche Funktionen hier überschreibt.
@@ -51,9 +62,14 @@ parsePage = (html, SITE) => {
     const $ = cheerio.load(html);
     const teasers = $(SITE.selector_for_teaser)
 
+	let STORAGE = JSON.parse(fs.readFileSync(`./../storage/${SITE.id}.json`), 'utf8')
+
     teasers.each(function(i, elem) {
-        handleTeaser(elem, SITE)
+    	// TODO: spätestens hier (Verwaltung des Storage) brauchen wir eigene Klassen
+        handleTeaser(elem, SITE, STORAGE)
     })
+
+    fs.writeFileSync(`./../storage/${SITE.id}.json`, JSON.stringify(STORAGE, null, 4))
 
     return teasers.length
 }
