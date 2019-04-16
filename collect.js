@@ -89,12 +89,12 @@ parsePage = (html, SITE) => {
 
 handleHtmlBody = (body, SITE) => {
     const numberOfTeasersFound = parsePage(body, SITE)
-    console.log(`Found ${numberOfTeasersFound} teasers on ${SITE.label_pretty}.`)
+    // console.log(`Found ${numberOfTeasersFound} teasers on ${SITE.label_pretty}.`)
 }
 
 collectSite = index => {
     const SITE = SITES[index]
-    console.log(`collecting ${SITE.url}`);
+    // console.log(`collecting ${SITE.url}`);
 
     request(SITE.url, function (error, response, body) {
 
