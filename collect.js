@@ -9,6 +9,16 @@ let countNewTeasers = 0
 let countUnchangedTeasers = 0
 let countChangedTeasers = 0
 
+clearStorage = STORAGE => {
+    for (index in STORAGE) {
+        const item = STORAGE[index]
+        if (item.title && item.title.length == 1 && (!item.last_seen || item.last_seen < RUNTIME - 3600*1000)) {
+            delete STORAGE[index]
+        }
+    }
+    return STORAGE
+}
+
 storeTeaser = (link, title, SITE, STORAGE) => {
     
     // console.log(`store '${title}' for '${SITE.label_pretty}' ('${link}')`);
@@ -69,6 +79,7 @@ parsePage = (html, SITE) => {
         handleTeaser(elem, SITE, STORAGE)
     })
 
+    STORAGE = clearStorage(STORAGE)
     fs.writeFileSync(`./../storage/${SITE.id}.json`, JSON.stringify(STORAGE, null, 4))
 
     return teasers.length
@@ -94,7 +105,7 @@ collectSite = index => {
         const fetchtime = new Date()
         // TODO: helper function for beautiful mysql format datetimes with leading zeros
         const fetchtimeString = `${fetchtime.getDate()}-${fetchtime.getMonth()+1}-${fetchtime.getFullYear()}_${fetchtime.getHours()}-${fetchtime.getMinutes()}`
-        fs.writeFileSync(`../storage/rawhtml/${SITE.id}__${fetchtimeString}.html`, body)
+        // fs.writeFileSync(`../storage/rawhtml/${SITE.id}__${fetchtimeString}.html`, body)
 
         handleHtmlBody(body, SITE)
         //clearStorage()
