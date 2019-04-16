@@ -82,6 +82,8 @@ parsePage = (html, SITE) => {
     STORAGE = clearStorage(STORAGE)
     fs.writeFileSync(`./../storage/${SITE.id}.json`, JSON.stringify(STORAGE, null, 4))
 
+	request.post(`https://pushdata.io/info@newsdiffs.de/changed_teasers_${SITE.id}/${countChangedTeasers}`)
+
     return teasers.length
 }
 
