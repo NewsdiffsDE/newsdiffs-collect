@@ -21,6 +21,17 @@ clearStorage = STORAGE => {
 
 storeTeaser = (link, title, SITE, STORAGE) => {
     
+	if (!link) {
+		return
+	}
+
+	// TODO: another reason for site-specific classes
+
+	// filter stuff like immobilienmarkt.faz.net, leserreisen.faz.net, abo.faz.net
+	if (link.indexOf('faz.net')>=0 && link.indexOf('www.faz.net')<0) {
+		return
+	}
+
     // console.log(`store '${title}' for '${SITE.label_pretty}' ('${link}')`);
 
     if (!STORAGE[link]) {
@@ -36,7 +47,7 @@ storeTeaser = (link, title, SITE, STORAGE) => {
             countUnchangedTeasers++
         } else {
             const lastTitle = STORAGE[link]['title'][STORAGE[link]['title'].length-1]
-            console.log('title changed!!!!!!!!')
+            console.log(`title changed @${SITE.id} !!!!!!!!`)
             console.log(`- OLD: '${lastTitle}'`)
             console.log(`+ NEW: '${title}'`)
             STORAGE[link]['title'].push(title)

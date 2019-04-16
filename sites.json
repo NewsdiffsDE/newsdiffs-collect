@@ -12,5 +12,19 @@
 		"label_pretty": "Der SPIEGEL",
 		"selector_for_teaser": "div[class^=\"teaser\"]",
 		"selector_for_title": ".article-title a"
+	},
+	{
+		"id": "stern",
+		"url": "https://www.stern.de/",
+		"label_pretty": "STERN",
+		"selector_for_teaser": "div.o-teaser",
+		"selector_for_title": "a[href^=\"https://www.stern.de/\"]"
+	},
+	{
+		"id": "faz",
+		"url": "https://www.faz.net/aktuell/",
+		"label_pretty": "FAZ",
+		"selector_for_teaser": "article.tsr-Base",
+		"selector_for_title": "a.tsr-Base_ContentLink"
 	}
 ]
