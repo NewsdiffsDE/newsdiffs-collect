@@ -1,0 +1,92 @@
+`<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="language" content="de">
+    <title>Newsdiffs: Änderungen auf deutschen Nachrichtenseiten</title>
+    <meta name="description" content="">
+    <meta name="date" content="2019-03-16">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./styles.css"/>
+    <meta name="author" content="Thomas Puppe" />
+<style>
+body {
+  line-height:1.6;
+  font-size:20px;
+  color:#444;
+}
+
+.hero{
+  font-face: sansserif;
+  font-size: 5vh;
+  height: 23vh;
+  line-height: 23vh;
+  text-align: center;
+  margin-bottom: 3rem;
+  background: radial-gradient(#eaffea 15%, rgba(0,0,0,0) 16%), radial-gradient(#ffecec 15%, rgba(0,0,0,0) 16%), #fff;
+  background-position: 0 0, 30px 30px;
+  background-origin: padding-box;
+  background-clip: border-box;
+  background-size: 60px 60px;
+}
+article {
+  width: 100%;
+  max-width: 42rem;
+  margin: 1rem auto;
+  padding: 1rem 2rem;
+}
+        ul {
+            list-style: none;
+        }
+        li {
+            border-top: 1px #252525 solid;
+            display: flex;
+        }
+        p {
+            //border-left: 1px pink solid;
+            //border-right: 1px pink solid;
+            //max-width: 450px;
+            //margin: 0 auto;
+            padding: 1em 2em;
+            max-width: 70ch;
+        }
+        hr {
+            border: 0; 
+            height: 1px; 
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2));
+            width: 10ch;
+        }
+        del {
+           background-color: lightpink;
+           color: black;
+           text-decoration: line-through;
+           //font-weight: lighter;
+        }
+
+        ins {
+          background-color: aquamarine;
+          color: black;
+          text-decoration: none;
+          font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <section class="hero">
+        <h1>NEWSDIFFS</h1>
+    </section>
+    <article>Inspiriert von <a href="http://newsdiffs.org/">newsdiffs.org/</a>, <a href="https://twitter.com/nyt_diff">@nyt_diff</a> und <a href="http://www.transparentmetric.com">transparentmetric.com</a> werden hier Veränderungen auf deutschen Nachrichtenmedien sichtbar gemacht.</article>
+</header>
+  
+<main id="main">
+    ${ pageHtml }
+</main>
+
+<footer>
+    <div class="container">
+        Made by <a href="https://www.thomaspuppe.de">Thomas Puppe</a>.
+    </div>
+</footer>
+</body>
+</html>`
