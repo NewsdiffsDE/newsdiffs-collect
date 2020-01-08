@@ -12,14 +12,14 @@ let countChangedTeasers = 0
 clearStorage = STORAGE => {
     for (index in STORAGE) {
         const item = STORAGE[index]
-        if (item.title && item.title.length == 1 && (!item.last_seen || item.last_seen < RUNTIME - 3600*1000)) {
+        if (item.versions && item.versions.length == 1 && (!item.last_seen || item.last_seen < RUNTIME - 3600*1000)) {
             delete STORAGE[index]
         }
     }
     return STORAGE
 }
 
-storeTeaser = (link, title, SITE, STORAGE) => {
+storeTeaser = (link, title, text, SITE, STORAGE) => {
     
 	if (!link) {
 		return
@@ -36,29 +36,39 @@ storeTeaser = (link, title, SITE, STORAGE) => {
 
     if (!STORAGE[link]) {
         STORAGE[link] = { 
-            link, 
-            'title': [title],
+            'link': link, 
+            'versions': [{
+                'title': title,
+                'text': text,
+                'seen': RUNTIME
+            }],
+            'first_seen': RUNTIME,
             'last_seen': RUNTIME }
         countNewTeasers++
     } else {
-        if (STORAGE[link]['title'][STORAGE[link]['title'].length-1] == title) {
+        const latestVersionIndex = STORAGE[link]['versions'].length-1
+        const latestVersion = STORAGE[link]['versions'][latestVersionIndex]
+        if (latestVersion['title'] == title && latestVersion['text'] == text) {
             //console.log('title exists')
             STORAGE[link]['last_seen'] = RUNTIME
             countUnchangedTeasers++
         } else {
-            const lastTitle = STORAGE[link]['title'][STORAGE[link]['title'].length-1]
-            console.log(`title changed @${SITE.id} !!!!!!!!`)
-            console.log(`- OLD: '${lastTitle}'`)
-            console.log(`+ NEW: '${title}'`)
-            STORAGE[link]['title'].push(title)
+            if (latestVersion['title'] !== title) {
+                console.log(`title changed @${SITE.id} !!!!!!!!`)
+                console.log(`- OLD: '${latestVersion['title']}'`)
+                console.log(`+ NEW: '${title}'`)                
+            }
+            if (latestVersion['text'] !== text) {
+                console.log(`text changed @${SITE.id} !!!!!!!!`)
+                console.log(`- OLD: '${latestVersion['text']}'`)
+                console.log(`+ NEW: '${text}'`)                
+            }
+            STORAGE[link]['versions'].push({
+                'title': title,
+                'text': text,
+                'seen': RUNTIME
+            })
             STORAGE[link]['last_seen'] = RUNTIME
-
-            // const htmlOfDiff = simplediff.htmlDiff(lastTitle, title)
-            // let diffieBody = fs.readFileSync('./diffie.html').toString()
-            // const htmlOfDiff = `<small>Geänderte Headline bei ZEIT Online: ${link}</small><p><script>document.write(htmlDiff('${lastTitle}', '${title}'))</script></p><hr>`
-            // diffieBody = diffieBody.replace('<!-- PLACEHOLDER_FOR_NEW -->', '<!-- PLACEHOLDER_FOR_NEW -->\n\n' + htmlOfDiff)
-            // fs.writeFileSync('./diffie.html', diffieBody)
-
             countChangedTeasers++
         }        
     }
@@ -66,15 +76,22 @@ storeTeaser = (link, title, SITE, STORAGE) => {
 }
 
 handleTeaser = ($teaser, SITE, STORAGE) => {
-    const link = cheerio(SITE.selector_for_title, $teaser)
+    const linkElement = cheerio(SITE.selector_for_title, $teaser)
 
-    if (link.length > 0) {
-        storeTeaser(link[0].attribs['href'], link[0].attribs['title'], SITE, STORAGE)
+    if (linkElement.length > 0) {
+        const link = linkElement[0].attribs['href']
+        const title = linkElement[0].attribs['title']
+        const text = cheerio(SITE.selector_for_text, $teaser).text().trim()
+        if (title && title.length && text && text.length) {
+            storeTeaser(link, title, text, SITE, STORAGE)
+        }
     }
 
     // TODO: vllt muss jede Zeitung eine eigene Klasse sein, die von BaseNewspaper erbt und solche Funktionen hier überschreibt.
     // SPIEGEL: href und title des Links () ... relativer link!
     // SZ: href des a.sz-teaser. Und da drin `sz-teaser__overline-title`+sz-teaser__title  
+
+    // TODO: Umgang mit Teasern die keinen Text haben, z.B. News auf der HP oder Buzzbox. Und vllt sogar doppelt drauf sind: normal mit Text, Buzzbox ohne Text.
 
 }
 
@@ -91,7 +108,7 @@ parsePage = (html, SITE) => {
     })
 
     STORAGE = clearStorage(STORAGE)
-    fs.writeFileSync(`./../storage/${SITE.id}.json`, JSON.stringify(STORAGE, null, 4))
+    fs.writeFileSync(`./../storage/${SITE.id}.json`, JSON.stringify(STORAGE, null, 2))
 
 	request.post(`https://pushdata.io/info@newsdiffs.de/changed_teasers_${SITE.id}/${countChangedTeasers}`)
 

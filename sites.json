@@ -3,28 +3,32 @@
 		"id": "zeit",
 		"url": "https://www.zeit.de/index",
 		"label_pretty": "ZEIT Online",
-		"selector_for_teaser": "article[class^=\"teaser\"]",
-		"selector_for_title": "a[href^=\"https://www.zeit.de/\"]"
+		"selector_for_teaser": "article[class*=\"teaser\"]",
+		"selector_for_title": "a[href^=\"https://www.zeit.de/\"]",
+		"selector_for_text": "p[class*=\"teaser\"][class*=\"__text\"]"
 	},
 	{
 		"id": "spiegel",
 		"url": "https://www.spiegel.de",
 		"label_pretty": "Der SPIEGEL",
 		"selector_for_teaser": "div[class^=\"teaser\"]",
-		"selector_for_title": ".article-title a"
+		"selector_for_title": ".article-title a",
+		"selector_for_text": ".article-intro"
 	},
 	{
 		"id": "stern",
 		"url": "https://www.stern.de/",
 		"label_pretty": "STERN",
 		"selector_for_teaser": "div.o-teaser",
-		"selector_for_title": "a[href^=\"https://www.stern.de/\"]"
+		"selector_for_title": "a[href^=\"https://www.stern.de/\"]",
+		"selector_for_text": ".teaser-copy"
 	},
 	{
 		"id": "faz",
 		"url": "https://www.faz.net/aktuell/",
 		"label_pretty": "FAZ",
 		"selector_for_teaser": "article.tsr-Base",
-		"selector_for_title": "a.tsr-Base_ContentLink"
+		"selector_for_title": "a.tsr-Base_ContentLink",
+		"selector_for_text": ".tsr-Base_Content"
 	}
 ]
