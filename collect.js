@@ -132,10 +132,11 @@ collectSite = index => {
 
         // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
 
-        const fetchtime = new Date()
+        /*const fetchtime = new Date()
         // TODO: helper function for beautiful mysql format datetimes with leading zeros
         const fetchtimeString = `${fetchtime.getDate()}-${fetchtime.getMonth()+1}-${fetchtime.getFullYear()}_${fetchtime.getHours()}-${fetchtime.getMinutes()}`
-        // fs.writeFileSync(`../storage/rawhtml/${SITE.id}__${fetchtimeString}.html`, body)
+        fs.writeFileSync(`../storage/rawhtml/${SITE.id}__${fetchtimeString}.html`, body)
+        */
 
         handleHtmlBody(body, SITE)
         //clearStorage()

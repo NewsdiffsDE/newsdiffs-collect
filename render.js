@@ -210,11 +210,12 @@ var checkDiff = function(before, after) {
 
 renderTeaserDiff = (teaser, SITE) => {
     let teaserHtml = `<li><div><p>Geänderte Headline bei <a href="${teaser.link}">${SITE.label_pretty}</p></a></div><div>`
-    for ( index in teaser.title ) {
+    for ( index in teaser.versions ) {
         nextIndex = parseInt(index, 10) + 1
-        if (nextIndex <= teaser.title.length - 1) {
-            teaserHtml = teaserHtml + '<p>' + htmlDiff(teaser.title[index], teaser.title[nextIndex]) + '</p>'
-            if (nextIndex < teaser.title.length - 1) {
+        if (nextIndex <= teaser.versions.length - 1) {
+            teaserHtml = teaserHtml + '<h3>' + htmlDiff(teaser.versions[index].title, teaser.versions[nextIndex].title) + '</h3>'
+            teaserHtml = teaserHtml + '<p>' + htmlDiff(teaser.versions[index].text, teaser.versions[nextIndex].text) + '</p>'
+            if (nextIndex < teaser.versions.length - 1) {
                 teaserHtml = teaserHtml + '<hr>'
             }
         }        
@@ -234,7 +235,7 @@ SITES.forEach( SITE => {
     let pageHtml = '<ul>'
     for ( index in teasers ) {
         const teaser = teasers[index]
-        if ( teaser.title.length < 2 ) {
+        if ( teaser.versions.length < 2 ) {
             continue
         }
 
