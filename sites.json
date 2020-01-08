@@ -8,14 +8,6 @@
 		"selector_for_text": "p[class*=\"teaser\"][class*=\"__text\"]"
 	},
 	{
-		"id": "spiegel",
-		"url": "https://www.spiegel.de",
-		"label_pretty": "Der SPIEGEL",
-		"selector_for_teaser": "div[class^=\"teaser\"]",
-		"selector_for_title": ".article-title a",
-		"selector_for_text": ".article-intro"
-	},
-	{
 		"id": "stern",
 		"url": "https://www.stern.de/",
 		"label_pretty": "STERN",
